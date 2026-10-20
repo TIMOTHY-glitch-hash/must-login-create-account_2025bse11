@@ -1,0 +1,203 @@
+/* 
+   MUST Student Portal - Login / Sign up page
+   styles.css - this file controls how the page LOOKS
+   (colours, sizes, spacing, layout)
+    */
+
+
+/*  VARIABLES 
+   :root is the top of the page. I store my colours and
+   images here ONCE, then reuse them anywhere with var(--name).
+    */
+:root {
+    /* IMAGES - the pictures used on the page (inside the images folder) */
+    --art-image: url("images/login-art.jpg");               /* picture on the left side */
+    --page-image: url("images/backdrop.jpg");               /* picture behind the whole page */
+    --art-position: center top;                             /* which part of the picture to show */
+    
+
+    /* COLOURS */
+    --text: #0d1020;            /* main dark text colour */
+    --muted: #5d6479;           /* grey colour for less important text */
+    --blue: #1a6dff;            /* main blue (buttons and links) */
+    --blue-light: #3d95ff;      /* lighter blue for the button gradient */
+    --field: #f6f8fc;           /* light background for the input boxes */
+    --line: #e1e7f1;            /* light grey for borders and lines */
+    --danger: #c62828;          /* red, used when an input is wrong */
+  }
+
+
+/*  BASIC SETUP  */
+
+/* The * means "every element". box-sizing makes width include padding
+   and border, so boxes do not become bigger than I expect. */
+  *, *::before, *::after { box-sizing: border-box; }
+
+/* Browsers add a default space around the page. This removes it. */
+  html, body { margin: 0; }
+
+/* The body is the whole visible page */
+  body {
+    min-height: 100vh;                         /* at least the full height of the screen */
+    display: grid; place-items: center;        /* puts the white card in the middle of the screen */
+    padding: 2rem 1rem;                        /* space around the card (top/bottom, left/right) */
+    font-family: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;   /* main font, with backups if it does not load */
+    color: var(--text);                        /* text colour from my variables */
+    /* background: the picture first, then a blue gradient as a backup if the picture is missing */
+    background: var(--page-image) center / cover no-repeat, linear-gradient(180deg, #d9e7ff 0%, #eaf0ff 55%, #f1eafd 100%);
+  }
+
+/* The two radio buttons at the top of the HTML are only used to switch forms.
+   I hide them here so the user does not see them. */
+  .state { position: absolute; opacity: 0; pointer-events: none; }
+
+
+/* ---------- 3. THE WHITE CARD ---------- */
+  .shell {
+    width: 100%; max-width: 1020px;                   /* full width but never wider than 1020px */
+    display: grid; grid-template-columns: 1fr 1fr;    /* split into 2 equal columns: picture | form */
+    background: rgba(255,255,255,.95);                /* white, slightly see-through */
+    border-radius: 30px;                              /* rounded corners */
+    box-shadow: 0 30px 80px rgba(60,80,160,.25);      /* soft shadow so the card looks lifted */
+    overflow: hidden;                                 /* hides anything that sticks out of the rounded corners */
+  }
+
+
+  /* ---------- 4. LEFT SIDE (picture panel) ---------- */
+  .art {
+    position: relative; isolation: isolate;           /* needed so the dark overlay (below) stays inside this panel */
+    min-height: 660px; padding: 2.6rem 2.4rem;        /* minimum height + space inside the panel */
+    display: flex; flex-direction: column; justify-content: space-between;   /* logo at the top, text at the bottom */
+    color: #fff;                                      /* white text so it shows on the picture */
+    /* the picture fills the panel; dark blue (#1b2147) is the backup colour */
+    background: var(--art-image) var(--art-position) / cover no-repeat, #1b2147;
+    border-radius: 30px;
+  }   
+
+  /* A dark layer on top of the picture so the white text is easy to read */
+  .art::after { 
+    content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+    background: linear-gradient(0deg, rgba(8,10,45,.7) 0%, rgba(8,10,45,.15) 55%, rgba(8,10,45,.35) 100%);
+  }
+
+/* The logo area: the crest picture and the word MUST side by side */
+.logo {
+  display: flex; align-items: center; gap: .9rem;                  /* put them in a row with a gap */
+  font-size: 1.25rem; font-weight: 500; letter-spacing: .35em;     /* spaced out letters */
+}
+
+/* The crest picture: a small white circle behind it so it shows on the photo */
+.logo img {
+  width: 56px; height: 56px; object-fit: contain;       /* fixed size, picture is not stretched */
+  background: #fff; border-radius: 50%; padding: 4px;   /* white circle */
+  box-shadow: 0 4px 14px rgba(0,0,0,.25);               /* small shadow */
+}
+
+  /* The small sentence under the big heading */
+  .art p { margin: 0 0 2.4rem; font-size: 1.1rem; line-height: 1.45; max-width: 26ch; color: #eef1ff; }
+
+  /* The "500,000+ students" row at the bottom of the picture */
+  .proof { display: flex; align-items: center; gap: 1rem; }
+  .faces { display: flex; }                              /* the 3 circles sit side by side */
+
+  /* Each circle with a letter inside (A, K, J) */
+  .faces b {
+    width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff; margin-right: -10px;   /* negative margin makes circles overlap */
+    display: grid; place-items: center; font-size: .8rem; font-weight: 600; color: #fff;           /* letter in the middle */
+  }
+  /* A different colour for each circle  */
+  .faces b:nth-child(1) { background: #b79337; }
+  .faces b:nth-child(2) { background: #cc7165; }
+  .faces b:nth-child(3) { background: #0b366a; }
+
+  /* The text next to the circles (the last div in .proof) with a thin line on its left */
+  .proof div:last-child { padding-left: 1rem; border-left: 1px solid rgba(255,255,255,.3); font-size: .78rem; color: #d3d9f5; line-height: 1.3; }
+  /* The big number "500,000+" */
+  .proof strong { display: block; font-size: 1rem; color: #fff; font-weight: 600; }
+
+
+  /* ---------- 5. RIGHT SIDE (forms) ---------- */
+  .panel { padding: 2.2rem 3rem 2.6rem; display: flex; flex-direction: column; }   /* space inside, items stacked top to bottom */
+
+  /* The small line at the top right ("Already have an account? Sign in").
+     It is hidden (display: none) until the right radio button is picked. */
+  .switch { align-self: flex-end; margin: 0; font-size: .88rem; color: var(--muted); display: none; }
+  .switch label { color: var(--blue); font-weight: 600; cursor: pointer; margin-left: .35rem; }   /* blue clickable word */
+  .switch label:hover { text-decoration: underline; }                                           /* underline when mouse is over it */
+
+  /* Both forms are hidden at first */
+  form { display: none; margin: auto 0; padding-top: 1.5rem; }
+
+  /* HOW THE SWITCH WORKS :
+     When the "signup" radio is checked, show the sign-up form and its top-right link.
+     When the "login" radio is checked, show the sign-in form and its top-right link.
+     The ~ symbol means "a later element on the same level". */
+  #r-signup:checked ~ .shell .form-signup,
+  #r-login:checked ~ .shell .form-login { display: block; }
+  #r-signup:checked ~ .shell .switch-signup,
+  #r-login:checked ~ .shell .switch-login { display: block; }
+
+  /* Shows an outline around the link when someone uses the keyboard (Tab key) */
+  #r-signup:focus-visible ~ .shell .switch-signup label,
+  #r-login:focus-visible ~ .shell .switch-login label { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 4px; }
+
+  /* The form headings ("Create your account" / "Welcome back") */
+  h2 { margin: 0 0 .6rem; font-size: 2.2rem; line-height: 1.1; font-weight: 600; max-width: 8ch; }
+  /* The grey sentence under each heading */
+  .sub { margin: 0 0 1.8rem; color: var(--muted); }
+
+
+  /* ---------- 6. INPUT BOXES ---------- */
+  /* Each input box sits inside a .field div. position: relative lets me
+     place the little icons inside the box. */
+  .field { position: relative; margin-bottom: .85rem; }
+
+  .field input {
+    width: 100%; height: 3.3rem; padding: 0 3rem 0 3rem;     /* big box; extra space left and right for the icons */
+    font: inherit; color: var(--text);                       /* use the same font as the page */
+    background: var(--field); border: 1px solid var(--line); border-radius: 14px;
+  }
+  .field input::placeholder { color: #7b8296; }              /* colour of the hint text ("Full name") */
+
+  /* When the user clicks inside the box: blue outline and white background */
+  .field input:focus { outline: 2px solid var(--blue); outline-offset: 1px; border-color: var(--blue); background: #fff; }
+  /* Red border if the user typed something wrong (like an email without @) */
+  .field input:user-invalid { border-color: var(--danger); }
+
+  /* The icons inside the boxes: placed absolutely, centred up and down */
+  .field svg { position: absolute; top: 50%; width: 20px; height: 20px; transform: translateY(-50%);
+    fill: none; stroke: #6a7185; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+  .field .lead { left: 1rem; }      /* icon on the left side (person, envelope, lock) */
+  .field .trail { right: 1rem; }    /* icon on the right side (the eye) */
+
+
+  /*  BUTTONS  */
+  /* Shared style for all buttons */
+  .btn {
+    width: 100%; height: 3.3rem; margin-top: .5rem;
+    font: inherit; font-weight: 600; cursor: pointer;      /* hand cursor when hovering */
+    border-radius: 14px; border: 0;
+  }
+  /* The main blue button */
+  .primary {
+    color: #fff; background: linear-gradient(180deg, var(--blue-light), var(--blue));   /* light blue to dark blue */
+    box-shadow: 0 12px 24px rgba(26,109,255,.32);                                       /* blue glow under the button */
+  }
+  .primary:hover { filter: brightness(1.06); }              /* slightly brighter when the mouse is over it */
+  .btn:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }   /* outline for keyboard users */
+
+  /* "Forgot password?" link, pushed to the right side */
+  .forgot { display: block; text-align: right; font-size: .88rem; margin: .1rem 0 .6rem; }
+
+
+  /*  SMALL SCREENS (phones and tablets) 
+     Everything inside @media only applies when the screen is 860px wide or less. */
+  @media (max-width: 860px) {
+    .shell { grid-template-columns: 1fr; max-width: 520px; }   /* one column: picture on top, form below */
+    .art { min-height: 300px; border-radius: 30px 30px 0 0; }  /* shorter picture, only the top corners rounded */
+    .art h1 { font-size: 1.9rem; max-width: none; }            /* smaller heading */
+    .art p { margin-bottom: 0; }
+    .proof { display: none; }                                  /* hide the "500,000+" row to save space */
+    .panel { padding: 1.6rem 1.5rem 2rem; }                    /* less padding on small screens */
+    h2 { max-width: none; font-size: 1.8rem; }
+  }
